@@ -3,9 +3,12 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 
+// Purcariu Bogdan
+
 int main()
  { 
    int VectorStare = 0b00000000;
+   int VectorMod = 0b0000;
    int temperatura = 0x00;
    int viteza = 0x00;
    int parametrii[] = {temperatura, viteza};
@@ -62,20 +65,25 @@ VectorStare = 0b00100000; // Masina este deblocata si se pot scoate rufele
 	regulator++;
    }
    VectorStare = 0b10000010;   // in acest moment masina de spalat este blocata, nu putem sa deschidem trapa si urmeaza sa se execute programul de prespalare
-   Prespalare(parametrii);
+   Prespalare(parametrii);     // Functia prespalare primeste ca si parametru al functie (argument), vectorul parametrii care contine temperatura si viteza
 }
 
   void Asteptare(){
      while(1){
    if(!(PINE & ( 1 << PE0 ))){
+      VectorMod = 0b0001;
       VectorStare = 0b00000001;
       Parametrii();
   }
   else
      continue;
+  //else if(!(PINE & ( 1 << PE1 ))) { VectorMod = 0b0010; }
+  //else if(!(PINE & ( 1 << PE2 ))) { VectorMod = 0b0100; }
+  //else if(!(PINE & ( 1 << PE3 ))) { VectorMod = 0b1000; }
 }
 
-}  
+}
+
    // Write your code here
    while (1){
       Asteptare();
